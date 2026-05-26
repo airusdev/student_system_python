@@ -1,12 +1,12 @@
 # Student System in Python
 ## STUDENT SYSTEM
 1. input validation
-    1.1 input validation of string to int
+    <!-- 1.1 input validation of string to int
     1.2 input validation of string to float
     1.3 input validation of string (must be strictly string)
     1.4 general validation
         1.4.1 input musn't be all spaces
-        1.4.2 input musnt't be empty
+        1.4.2 input musnt't be empty -->
     1.5 validation for student_info
         1.5.1 check if the inputted name is a valid name
         1.5.2 check if inputted course is part of the course of the "school"
