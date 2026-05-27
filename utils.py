@@ -1,53 +1,44 @@
 import db_access
+import uuid
 
 # --- GROUP 1: VALIDATORS ---
 # All validators starts with validate_
-def validated_string_input(message: str) -> str:
+def validate_string_input(message: str) -> str:
     """Takes in a message input and checks if it's a valid string"""
-    valid_string = False
     
-    while not valid_string:
-        try: 
-            string = input(message)
-            valid_string = True
-            return string
-
-        except ValueError or TypeError:
-            print("The given input is not a valid string.")
-            valid_string = True
-            return
-
-
-def validated_int_input(message: str) -> int:
-    """Takes in a message input and checks if it's a valid integer"""
-    
-    valid_int = False
-    
-    while not valid_int:
-        try:
-            integer = int(input(message)) 
-            valid_int = True    
-            return integer
-    
-    try:
-        valid_int = int(input(message))
-        return valid_int
-
-    except ValueError or TypeError:
-        print("The given input is not a valid integer.")
-        return
-
-def validated_float_input(message: str) -> float:
-    """Takes in a message input and checks if it's a valid float"""
-    try:
-        valid_float = float(input(message))
-        return valid_float
-
-    except ValueError or TypeError:
-        print("Given input is not a valid ")
-        return
+    while True:
+        string = input(message)
+        string_to_compare = string.replace(" ", "") 
         
+        if not string_to_compare.isalpha():
+            print("The given string must not contain other characters except letters.\n")
+        else:
+            return string
+            
+        
+def validate_int_input(message: str) -> int:
+    """Takes in a message input and checks if it's a valid integer"""
 
+    while True:
+        try:
+            integer = int(input(message))
+            return integer
+
+        except (TypeError, ValueError):
+            print("The given input is not a valid integer.\n")
+
+
+def validate_float_input(message: str) -> float:
+    """Takes in a message input and checks if it's a valid float"""
+    
+    while True:
+        try:
+            valid_float = float(input(message)) 
+            return valid_float
+        
+        except (ValueError, TypeError):
+            print("Given input is not a valid float.\n")
+       
 
 def validate_menu_input(string_input: str) -> int:
     """Validates the user's choice in the main menu and returns it"""
@@ -64,76 +55,105 @@ def validate_menu_input(string_input: str) -> int:
         print("The given choice is not an integer.")
         return
 
-### TO FIX
-def validate_course_input(course: str) -> bool:
-    """Validates the inputted course in student information"""    
 
-    validated_string = validated_strin
-
+def validate_gpa_input(message: str) -> float:
+    """Takes in a message for the input() and checks if the input is a valid GPA""" 
     
-    try:
-        # need a better way to structure this valid_courses, so that it wont be too repetitive
-        valid_courses = {'BSCS',
-                        'Bachelor of Science in Computer Science',
-                        'BSIT',
-                        'Bachelor of Science in Information Technology',
-                        'BSN',
-                        'Bachelor of Science in Nursing',
-                        'BSA',
-                        'Bachelor of Science in Accountancy',
-                        'BSME',
-                        'Bachelor of Science in Mechanical Engineering',
-                        'BSEE',
-                        'Bachelor of Science in Electrical Engineering'
-                        }
+    valid_gpa = False
+    
+    while not valid_gpa:
+        gpa = validate_float_input(message) 
         
-        if valid_courses[course]:
-            return True
+        if (1 <= gpa <= 5):
+            valid_gpa = True
+            return gpa
+        else:
+            print("The given GPA is not within 1 and 5.\n")
         
-    except KeyError: 
-        print("Inputted course is not within the existing courses.")
-        return False
+
+def validate_course_input(message: str) -> str:
+    """Validates the inputted course in student information"""
+    
+    # print valid courses and guide user
+    valid_courses = {'BSCS - Bachelor of Science in Computer Science',
+                    'BSIT - Bachelor of Science in Information Technology',
+                    'BSN - Bachelor of Science in Nursing',
+                    'BSA - Bachelor of Science in Accountancy',
+                    'BSME - Bachelor of Science in Mechanical Engineering',
+                    'BSEE - Bachelor of Sciencee in Electrical Engineering',
+                    }
+    
+    print("\nPlease input the abbreviation.\nFor example, put in 'BSCS' if you want to pursue Computer Science.\n")
+    for course in valid_courses:
+        print(course)
+    
+    found = False 
+    while not found:
+        input_course = validate_string_input("\n" + message)
+        
+        for course in valid_courses:
+            if input_course.upper() in course:
+                found = True
+                return course                
+
+        if not found:
+            print("Please input the correct abbreviation for your course.\n")
 
 
-# --- GROUP 2: MAIN MENU ---
+def validate_age_input(message: str) -> int:
+    integer = validate_int_input(message)
+    valid_age = False
+    
+    while not valid_age:
+        if integer > 0:
+            valid_age = True
+            return integer
+        else:
+            print("The age of student must be greater than 0.\n")    
+
+
+# --- GROUP 2: FORMATTING ---
+def title_case(message: str) -> str:
+    """Formats the inputted string to Title Case""" 
+    
+    string = validate_string_input(message).split(" ")
+    new_string = ""
+    
+    for i in range(0, len(string)):
+        new_string = string[i][0].upper() + string[i][1:].lower()
+        string[i] = new_string
+        
+    return " ".join(string)
+
+
+# --- GROUP 3: MAIN MENU ---
 # functions related to the main menu
 
+### ADD VALIDATION FOR GPA
 def acquire_student_information() -> dict:
+    """Acquire the student's information that's about to be added."""
+    
     student_information = {
-        "first_name": None,
-        "middle_initial": None,
-        "last_name": None,
-        "age": None,
-        "course": None,
-        "gpa": None
+        "first_name": title_case("Input the student's first name: "),
+        "middle_name": title_case("Input the student's middle name: "),
+        "last_name": title_case("Input the student's last name: "),
+        "age": validate_age_input("How old is the student? "),
+        "course": validate_course_input("In what course does the student belong to? "),
+        "gpa": validate_gpa_input("Lastly, input the student's GPA: ")
     }
     
-    valid_input = None 
-     
-    while valid_input == None:
-
+    for access, info in student_information.items():
+        print(info)
     
-    first_name = validated_string_input("Input the student's first name: ")
-    middle_name = validated_string_input("Input the student's middle name: ")
-    last_name = validated_string_input("Input the student's last name: ")
-    age = validated_int_input("How old is the student? ")
-    course = validated_string_input("From what course does this student belong to: ")
-    gpa = validated_float_input("Lastly, input the student's GPA: ")
-    
-    print("Name:", first_name, middle_name, last_name)
-    print("Age:", age)
-    print("Course:", course)
-    print("GPA:", gpa)
+    return student_information
     
 
 def add_student() -> None:
     """Calls up db_access to add information to the database""" 
     student_information = acquire_student_information()
-    student_uuid = 
+    student_uuid = str(uuid.uuid4())
+    db_access.student_to_database(student_information, student_uuid)
 
-    # db_access.student_to_database()
-    
-    return "Add Student"
 
 def update_student():
     return "Update Student"
@@ -191,3 +211,4 @@ def main_menu() -> str:
     validated_choice = validate_menu_input(user_choice) 
     
     return validated_choice
+
