@@ -8,14 +8,13 @@ def validate_string_input(message: str) -> str:
     
     while True:
         string = input(message)
-        string_to_compare = string.replace(" ", "") 
         
-        if not string_to_compare.isalpha():
+        if not string.isalpha():
             print("The given string must not contain other characters except letters.\n")
         else:
             return string
             
-        
+
 def validate_int_input(message: str) -> int:
     """Takes in a message input and checks if it's a valid integer"""
 
@@ -153,10 +152,12 @@ def add_student() -> None:
     student_information = acquire_student_information()
     student_uuid = str(uuid.uuid4())
     db_access.student_to_database(student_information, student_uuid)
+    
+    return "Added Student"
 
 
 def update_student():
-    return "Update Student"
+    return "Updated Student"
 
 def delete_student():
     return "Delete Student"
@@ -165,6 +166,7 @@ def search_student():
     return "Search Student"
 
 def list_all_students():
+    db_access.list_all_students()
     return "List All Students"
 
 def sort_students():
@@ -191,7 +193,7 @@ def pick_option(option: int):
         return main_menu_options[option]()
 
     except KeyError:
-        return "The choice picked is not within 1 and 7"
+        return "The choice picked is not within 1 and 7."
 
 
 def main_menu() -> str:
