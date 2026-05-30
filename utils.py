@@ -8,8 +8,9 @@ def validate_string_input(message: str) -> str:
     
     while True:
         string = input(message)
+        string_to_compare = string.replace(" ", "")
         
-        if not string.isalpha():
+        if not string_to_compare.isalpha():
             print("The given string must not contain other characters except letters.\n")
         else:
             return string
@@ -63,12 +64,12 @@ def validate_gpa_input(message: str) -> float:
     while not valid_gpa:
         gpa = validate_float_input(message) 
         
-        if (1 <= gpa <= 5):
+        if (1 <= gpa <= 4):
             valid_gpa = True
             return gpa
         else:
-            print("The given GPA is not within 1 and 5.\n")
-        
+            print("The given GPA is not within 1 and 4.\n")
+
 
 def validate_course_input(message: str) -> str:
     """Validates the inputted course in student information"""
@@ -104,14 +105,14 @@ def validate_age_input(message: str) -> int:
     valid_age = False
     
     while not valid_age:
-        if integer > 0:
+        if 15 <= integer <= 60:
             valid_age = True
             return integer
         else:
-            print("The age of student must be greater than 0.\n")    
+            print("The inputted age must be within 15 and 60.\n")    
 
 
-# --- GROUP 2: FORMATTING ---
+# --- GROUP 2: STRING FORMATTING ---
 def title_case(message: str) -> str:
     """Formats the inputted string to Title Case""" 
     
@@ -128,7 +129,6 @@ def title_case(message: str) -> str:
 # --- GROUP 3: MAIN MENU ---
 # functions related to the main menu
 
-### ADD VALIDATION FOR GPA
 def acquire_student_information() -> dict:
     """Acquire the student's information that's about to be added."""
     
@@ -145,13 +145,12 @@ def acquire_student_information() -> dict:
         print(info)
     
     return student_information
-    
+
 
 def add_student() -> None:
     """Calls up db_access to add information to the database""" 
     student_information = acquire_student_information()
-    student_uuid = str(uuid.uuid4())
-    db_access.student_to_database(student_information, student_uuid)
+    db_access.student_to_database(student_information)
     
     return "Added Student"
 
@@ -178,7 +177,7 @@ def exit_():
 
 def pick_option(option: int):
     """Returns the corresponding valid function according to the choice the user picked"""
-    
+
     try:
         main_menu_options = {
             1: add_student,
