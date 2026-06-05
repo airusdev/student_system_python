@@ -6,7 +6,7 @@ import db_access
 ## SYSTEM LOOP
 while True:
     valid_menu_choice = False
-    user_menu_choice = None
+    user_menu_choice = None 
     
     # get the user's main menu choice
     while not valid_menu_choice:

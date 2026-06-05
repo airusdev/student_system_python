@@ -1,5 +1,13 @@
 {
-    "2026S-1": {
+    "2026S1": {
+        "first_name": "Ariannah",
+        "middle_name": "Rich",
+        "last_name": "De Villa",
+        "age": 18,
+        "course": "BSCS - Bachelor of Science in Computer Science",
+        "gpa": 1.0
+    },
+    "2026S2": {
         "first_name": "Airus Jhan",
         "middle_name": "Hagos",
         "last_name": "Francisco",

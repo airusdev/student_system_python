@@ -1,5 +1,4 @@
 import db_access
-from db_access import students
 from datetime import datetime
 import uuid
 import re
@@ -100,7 +99,7 @@ def validate_course_input(message: str) -> str:
                 return course                
 
         if not found:
-            print("Please input the correct abbreviation for your course.\n")
+            print("Please input the correct abbreviation for your course.")
 
 def validate_age_input(message: str) -> int:
     """Validates if the student's age is within 15 and 60."""
@@ -114,21 +113,6 @@ def validate_age_input(message: str) -> int:
         else:
             print("The inputted age must be within 15 and 60.\n")    
 
-def validate_student_id(message: str) -> bool:
-    """Validates if the student ID is in a valid format and if it exists in the database."""
-    student_id_format = rf"^{datetime.now().year}S[1-9]\d*$"
-
-    while True:
-        student_id = validate_string_input(message)
-        
-        if not re.fullmatch(student_id_format, student_id):
-            print("This student ID is not in a valid format.")
-            return False
-        elif students.get(student_id) == None:
-            print("This student ID does not exist in the database.")
-            return False
-        else:
-            return True
 
 
 
