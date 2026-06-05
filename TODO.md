@@ -1,4 +1,14 @@
 # Student System in Python
+## TODAY'S GOALS (May 30, 2026)
+    1. finalize student id number --- 75%-ish done
+    2. validate student, check if student is already added otherwise warning
+    3. 
+    
+
+
+
+
+
 ## STUDENT SYSTEM
 1. input validation
     <!-- 1.1 input validation of string to int
@@ -29,5 +39,14 @@
     3.3 input age
     3.4 input course
     3.5 input gpa
+
+
+4. update_student function
+    4.1 be able to pick an option on what to update: name, age, course, gpa
+    4.2 option to also update all
+    4.3 input student_id to check
+
+
+
 
 ## DATABASE

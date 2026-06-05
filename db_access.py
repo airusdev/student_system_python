@@ -2,8 +2,23 @@ import json
 import uuid
 import utils
 from datetime import datetime
+import time
 
 db_file = "./database.json"
+current_year = 2026
+
+
+# UPDATE STUDENT COUNTER
+def update_student_counter() -> None:
+    global current_year 
+    
+    if datetime.now().year > current_year:
+        current_year = datetime.now().year
+        student_counter = 0
+
+update_student_counter()
+
+
 
 # DATABASE OPERATIONS
 def load_db():
@@ -22,53 +37,70 @@ def save_db(data):
 
 
 # STUDENT SYSTEM OPERATIONS
+
 def delete_student(student_id):
     """Delete a student in the database using a student id"""
     return
 
 
-def create_student_id() -> int: ## NUMBER ONE PRIORITY
+def list_all_students() -> str:
+    """Lists all students in order of how they were added"""
+
+    if student_counter == 0:
+        print("There are no added students yet!")
+        return
+
+
+    for identification, information in students.items():
+        first_name = information["first_name"]
+        middle_name = information["middle_name"]
+        last_name = information["last_name"]
+        age = information["age"]
+        course = information["course"]
+        gpa = information["gpa"]
+
+        student = f"Full Name: {first_name} {middle_name[0]}. {last_name}\nAge: {age}\nCourse: {course}\nGPA: {gpa}"
+        print(student)
+
+
+# UPDATE STUDENT
+def update_name() -> str:
+    return
+
+def update_age() -> int:
+    return
+
+def update_course() -> str:
+    return
+
+def update_gpa() -> float:
+    return
+
+def update_student_choice(choice)
+
+def update_student_in_database(student_id: int) -> None: # we can use utils.validate_student_id
+    """Using the student ID, the system updates the student's information"""
+    print("What information of student would you like to update?")
+    print(" (1) Name\n (2) Age\n (3) Course\n (4) GPA")
+
+
+
+## ADD STUDENT
+def create_student_id() -> int:
     """Creates the student's unique identifier"""
     global student_counter
-    current_year = datetime.now().year
 
-    student_id = f"{current_year}A{student_counter}"    
+    student_id = f"{current_year}S{student_counter}"    
     student_counter += 1
+    
+    print(f"Student ID: {student_id}")
+    print("Please make sure to store the student_id in a safe location.\nThis will be used as the student's form of identification.\n")
     
     return student_id
 
 
-def validate_student_existence(given_info: dict) -> str: ## NUMBER TWO PRIORITY
-    """Identifies if the student already exists in the system"""
-    student_exists = False
-    
-    for student_id, information in students.items():
-        if students[student_id] == given_info:
-            student_exists = True
-    
-s
-    if student_exists:
-        print("This student exists already!") 
-    
-
-def list_all_students() -> str:
-    """Lists all students in order of highest GPA to lowest"""
-    student_list = []
-    
-    return
-
-
-# create a validation if a student already exists
 def student_to_database(student_information: dict) -> None:
     """Pushes the recently added student to the database"""
-    student_in_database = validate_student_existence(student_information)
-
     student_id = create_student_id()
     students[student_id] = student_information
-
-    
-    
-    save_db(students) 
-    
-    print(f"Student ID: {student_id}")
-
+    save_db(students)

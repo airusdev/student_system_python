@@ -1,5 +1,8 @@
 import db_access
+from db_access import students
+from datetime import datetime
 import uuid
+import re
 
 # --- GROUP 1: VALIDATORS ---
 # All validators starts with validate_
@@ -99,8 +102,8 @@ def validate_course_input(message: str) -> str:
         if not found:
             print("Please input the correct abbreviation for your course.\n")
 
-
 def validate_age_input(message: str) -> int:
+    """Validates if the student's age is within 15 and 60."""
     integer = validate_int_input(message)
     valid_age = False
     
@@ -110,6 +113,23 @@ def validate_age_input(message: str) -> int:
             return integer
         else:
             print("The inputted age must be within 15 and 60.\n")    
+
+def validate_student_id(message: str) -> bool:
+    """Validates if the student ID is in a valid format and if it exists in the database."""
+    student_id_format = rf"^{datetime.now().year}S[1-9]\d*$"
+
+    while True:
+        student_id = validate_string_input(message)
+        
+        if not re.fullmatch(student_id_format, student_id):
+            print("This student ID is not in a valid format.")
+            return False
+        elif students.get(student_id) == None:
+            print("This student ID does not exist in the database.")
+            return False
+        else:
+            return True
+
 
 
 # --- GROUP 2: STRING FORMATTING ---
@@ -141,8 +161,9 @@ def acquire_student_information() -> dict:
         "gpa": validate_gpa_input("Lastly, input the student's GPA: ")
     }
     
+    print("\nInformation:")
     for access, info in student_information.items():
-        print(info)
+        print(f"{access}: {info}")
     
     return student_information
 
@@ -156,6 +177,7 @@ def add_student() -> None:
 
 
 def update_student():
+    db_access.update_student_in_database()
     return "Updated Student"
 
 def delete_student():
