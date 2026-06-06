@@ -78,6 +78,7 @@ def validate_course_input(message: str) -> str:
     
     # print valid courses and guide user
     valid_courses = {'BSCS - Bachelor of Science in Computer Science',
+                     'DMD - Doctor of Dental Medicine',
                     'BSIT - Bachelor of Science in Information Technology',
                     'BSN - Bachelor of Science in Nursing',
                     'BSA - Bachelor of Science in Accountancy',
@@ -103,10 +104,21 @@ def validate_course_input(message: str) -> str:
 
 def validate_age_input(message: str) -> int:
     """Validates if the student's age is within 15 and 60."""
-    integer = validate_int_input(message)
+    while True:
+        integer = validate_int_input(message)
+        
+        if (15 <= integer <= 60):
+            valid_age = True
+            return integer
+        else:
+            print("The inputted age must be within 15 and 60.\n") 
+    
+    
     valid_age = False
     
     while not valid_age:
+        integer = validate_int_input(message)
+        
         if 15 <= integer <= 60:
             valid_age = True
             return integer
@@ -165,6 +177,7 @@ def update_student():
     return "Updated Student"
 
 def delete_student():
+    db_access.delete_student()
     return "Delete Student"
 
 def search_student():

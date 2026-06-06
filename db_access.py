@@ -8,7 +8,6 @@ import re
 db_file = "./database.json"
 current_year = 2026
 
-
 # DATABASE OPERATIONS
 def load_db():
     """Loads the database""" 
@@ -23,20 +22,20 @@ def save_db(data):
 
 ## UPDATE STUDENT COUNTER
 def update_student_counter() -> None:
-    global current_year 
-    
-    if datetime.now().year > current_year:
-        current_year = datetime.now().year
-        student_counter = 0
+    if datetime.now().year > students["current_year"]:
+        students["current_year"] = datetime.now().year
+        students["student_counter"] = 0
+        save_db(students)
 
 students = load_db()
-student_counter = len(students)
 update_student_counter()
+student_counter = students["student_counter"]
+current_year = students["current_year"]
 
 
 # STUDENT SYSTEM OPERATIONS
 ## GENERAL VALIDATORS
-def validate_student_id(message: str) -> str:
+def acquire_student_id(message: str) -> str:
     """Validates if the student ID is in a valid format and if it exists in the database."""
     student_id_format = rf"^{datetime.now().year}S[1-9]\d*$"
     
@@ -45,7 +44,7 @@ def validate_student_id(message: str) -> str:
 
         if not re.fullmatch(student_id_format, given_id):
             print("This student ID is not in a valid format.\n")
-        elif students.get(given_id) == None:
+        elif students["records"].get(given_id) == None:
             print("This student ID does not exist in the database.\n")
         else:
             return given_id
@@ -54,17 +53,18 @@ def validate_student_id(message: str) -> str:
 
 ## PRINT STUDENTS
 def list_all_students() -> str | None:
-    # add proper formatting for listing all of the students
-    # Student List
-    # ------------
-    # something like that
     """Lists all students in order of how they were added"""
-
+    
     if student_counter == 0:
         print("There are no added students yet!")
         return
-    
-    for identification, information in students.items():
+
+    print("\n-------   Student List   -------\n")
+    current_student = 1 
+     
+    for identification, information in students["records"].items():
+        print(f"Student No. {current_student}:")
+        
         first_name = information["first_name"]
         middle_name = information["middle_name"]
         last_name = information["last_name"]
@@ -72,14 +72,21 @@ def list_all_students() -> str | None:
         course = information["course"]
         gpa = information["gpa"]
 
-        student = f"Full Name: {first_name} {middle_name[0]}. {last_name}\nAge: {age}\nCourse: {course}\nGPA: {gpa}"
-        print(student)
+        student = f"  Full Name: {first_name} {middle_name[0]}. {last_name}\n  Age: {age}\n  Course: {course}\n  GPA: {gpa}"
+        print(student, end="\n\n")
+        current_student += 1
 
-
+    print("--------------------------------")
+    
+    
 ## DELETE STUDENT
-def delete_student(student_id):
-    """Delete a student in the database using a student id"""
-    return
+def delete_student():
+    """Delete a student in the database using student id"""
+    student_id = acquire_student_id("Input the student ID you wish to delete: ")
+    students["records"].pop(student_id)
+    print(f"Deleted Student ID: {student_id}")
+
+    save_db(students)
 
 
 ## UPDATE STUDENT
@@ -171,12 +178,10 @@ def update_student_choice() -> dict:
 
 def update_student_in_database() -> None:
     """Using the student ID, the system updates the student's information"""
-    student_id = validate_student_id("Input the student ID you wish to update: ") 
+    student_id = acquire_student_id("Input the student ID you wish to update: ") 
     updated_student_information = update_student_choice()
-
-    for identification, updated_info in updated_student_information.items():
-        students[student_id][identification] = updated_info
-
+    
+    students[student_id].update(updated_student_information) 
     save_db(students)
 
 ## ADD STUDENT
@@ -184,8 +189,8 @@ def create_student_id() -> int:
     """Creates the student's unique identifier"""
     global student_counter
 
-    student_counter += 1
-    student_id = f"{current_year}S{student_counter}"    
+    students["student_counter"] += 1
+    student_id = f"{current_year}S{students["student_counter"]}"    
     
     print(f"Student ID: {student_id}")
     print("Please make sure to store the student_id in a safe location.\nThis will be used as the student's form of identification.\n")
@@ -196,5 +201,5 @@ def create_student_id() -> int:
 def student_to_database(student_information: dict) -> None:
     """Pushes the recently added student to the database"""
     student_id = create_student_id()
-    students[student_id] = student_information
+    students["records"][student_id] = student_information
     save_db(students)

@@ -1,9 +1,10 @@
 # Student System in Python
-## TODAY'S GOALS (May 30, 2026)
-    1. finalize student id number --- 75%-ish done
-    2. validate student, check if student is already added otherwise warning
-    3. 
-    
+## TODAY'S GOALS (June 6, 2026)
+    <!-- 1. make list all student work with proper formatting -->
+    2. finish delete student
+
+
+error in validate_course_input() -> put in "BS" and it gets accepted. it assumed the first matching 'BS' abbreviation
 
 
 
