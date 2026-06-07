@@ -1,7 +1,7 @@
 # Student System in Python
-## TODAY'S GOALS (June 6, 2026)
-    <!-- 1. make list all student work with proper formatting -->
-    2. finish delete student
+## TODAY'S GOALS (June 7, 2026)
+    1. fix validation of validate_course_input()
+    2. finish search_student()
 
 
 error in validate_course_input() -> put in "BS" and it gets accepted. it assumed the first matching 'BS' abbreviation

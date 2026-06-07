@@ -1,29 +1,13 @@
 {
     "current_year": 2026,
-    "student_counter": 5,
+    "student_counter": 1,
     "records": {
         "2026S1": {
-            "first_name": "Ariannah Rich",
-            "middle_name": "De Villa",
-            "last_name": "Galicia",
-            "age": 18,
-            "course": "DMD - Doctor of Dental Medicine",
-            "gpa": 1.0
-        },
-        "2026S2": {
-            "first_name": "Arius",
-            "middle_name": "Haygoes",
-            "last_name": "Frensisko",
+            "first_name": "Airus Jhan",
+            "middle_name": "Hagos",
+            "last_name": "Francisco",
             "age": 17,
             "course": "BSCS - Bachelor of Science in Computer Science",
-            "gpa": 1.0
-        },
-        "2026S4": {
-            "first_name": "Ajdnwajn",
-            "middle_name": "Akdksa",
-            "last_name": "Amskdm",
-            "age": 16,
-            "course": "BSEE - Bachelor of Sciencee in Electrical Engineering",
             "gpa": 1.0
         }
     }

@@ -95,7 +95,7 @@ def validate_course_input(message: str) -> str:
         input_course = validate_string_input("\n" + message)
         
         for course in valid_courses:
-            if input_course.upper() in course:
+            if input_course.upper() == course.split()[0]:
                 found = True
                 return course                
 
@@ -181,6 +181,7 @@ def delete_student():
     return "Delete Student"
 
 def search_student():
+    db_access.search_student()
     return "Search Student"
 
 def list_all_students():

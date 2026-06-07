@@ -29,7 +29,6 @@ def update_student_counter() -> None:
 
 students = load_db()
 update_student_counter()
-student_counter = students["student_counter"]
 current_year = students["current_year"]
 
 
@@ -42,7 +41,10 @@ def acquire_student_id(message: str) -> str:
     while True:
         given_id = input(message)
 
-        if not re.fullmatch(student_id_format, given_id):
+        if students["student_counter"] == 0:
+            print("There are no students. Please add a student first.")
+            break
+        elif not re.fullmatch(student_id_format, given_id):
             print("This student ID is not in a valid format.\n")
         elif students["records"].get(given_id) == None:
             print("This student ID does not exist in the database.\n")
@@ -59,7 +61,7 @@ def list_all_students() -> str | None:
         print("There are no added students yet!")
         return
 
-    print("\n-------   Student List   -------\n")
+    print("\n─────────────   Student List   ─────────────\n")
     current_student = 1 
      
     for identification, information in students["records"].items():
@@ -76,7 +78,29 @@ def list_all_students() -> str | None:
         print(student, end="\n\n")
         current_student += 1
 
-    print("--------------------------------")
+    print("──────────────────────────────────────────────")
+    print(f"Total of Student/s: {current_student}\n")
+    
+    
+    
+## SEARCH STUDENT
+def search_student():
+    """Prints a student's information using their student ID"""
+    student_id = acquire_student_id("Input the student ID you wish to search: ")
+    database = students["records"][student_id]
+
+    first_name = database["first_name"]
+    middle_name = database["middle_name"]
+    last_name = database["last_name"]
+    age = database["age"]
+    course = database["course"]
+    gpa = database["gpa"]
+
+    print("\n\n─────────────   Student List   ─────────────\n")
+    student = f"  Full Name: {first_name} {middle_name[0]}. {last_name}\n  Age: {age}\n  Course: {course}\n  GPA: {gpa}"
+    print(student)
+    print("\n──────────────────────────────────────────────\n")
+     
     
     
 ## DELETE STUDENT
@@ -187,12 +211,10 @@ def update_student_in_database() -> None:
 ## ADD STUDENT
 def create_student_id() -> int:
     """Creates the student's unique identifier"""
-    global student_counter
-
     students["student_counter"] += 1
-    student_id = f"{current_year}S{students["student_counter"]}"    
+    student_id = f"{students["current_year"]}S{students["student_counter"]}"    
     
-    print(f"Student ID: {student_id}")
+    print(f"\nStudent ID: {student_id}")
     print("Please make sure to store the student_id in a safe location.\nThis will be used as the student's form of identification.\n")
     
     return student_id
