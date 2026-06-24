@@ -55,6 +55,7 @@ def acquire_student_id(message: str) -> str:
 
 ## SORT STUDENTS
 def display_sorted_results(info: list[dict[str]]) -> str:
+    """Displays the results after sorting the information."""
     print("\n─────────────   Student List   ─────────────\n")
     
     for i in range(0, len(info)):
@@ -77,6 +78,7 @@ def display_sorted_results(info: list[dict[str]]) -> str:
     
 
 def sort_by_name() -> str | None:
+    """Sorts the student database by name (A-Z)"""
     sorted_students = sorted(
         student_records.values(),
         key=lambda student: student["last_name"].lower()
@@ -85,6 +87,7 @@ def sort_by_name() -> str | None:
     display_sorted_results(sorted_students)
 
 def sort_by_gpa() -> str | None:
+    """Sorts the student database by their GPA (Highest First)"""
     sorted_students = sorted(
         student_records.values(),
         key=lambda student: student["gpa"]
@@ -93,6 +96,7 @@ def sort_by_gpa() -> str | None:
     display_sorted_results(sorted_students)
 
 def sort_by_age() -> str | None:
+    """Sorts the student database by their age (Highest First)"""
     sorted_students = sorted(
         student_records.values(),
         key=lambda student: student["age"],
