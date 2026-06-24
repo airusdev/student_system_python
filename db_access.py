@@ -28,6 +28,7 @@ def update_student_counter() -> None:
         save_db(students)
 
 students = load_db()
+student_records = students["records"]
 update_student_counter()
 current_year = students["current_year"]
 
@@ -35,7 +36,7 @@ current_year = students["current_year"]
 # STUDENT SYSTEM OPERATIONS
 ## GENERAL VALIDATORS
 def acquire_student_id(message: str) -> str:
-    """Validates if the student ID is in a valid format and if it exists in the database."""
+    """Acquires and validates student ID is in a valid format and if it exists in the database."""
     student_id_format = rf"^{datetime.now().year}S[1-9]\d*$"
     
     while True:
@@ -52,21 +53,101 @@ def acquire_student_id(message: str) -> str:
             return given_id
 
 
+## SORT STUDENTS
+def display_sorted_results(info: list[dict[str]]) -> str:
+    print("\n─────────────   Student List   ─────────────\n")
+    
+    for i in range(0, len(info)):
+        print(f"Student no. {i + 1}:") 
+        
+        student = info[i]
+        first = student["first_name"]
+        middle = student["middle_name"]
+        last = student["last_name"]
+        age = student["age"]
+        course = student["course"]
+        gpa = student["gpa"]
+        
+        identification = f"    Full Name: {last}, {first} {middle[0]}.\n    Age: {age}\n    Course: {course}\n    GPA: {gpa}"
+        print(identification, end="\n\n")
 
-## PRINT STUDENTS
+    print("──────────────────────────────────────────────")
+    print(f"Total of Student/s: {len(info)}\n")
+    
+    
+
+def sort_by_name() -> str | None:
+    sorted_students = sorted(
+        student_records.values(),
+        key=lambda student: student["last_name"].lower()
+    )
+    
+    display_sorted_results(sorted_students)
+
+def sort_by_gpa() -> str | None:
+    sorted_students = sorted(
+        student_records.values(),
+        key=lambda student: student["gpa"]
+    )
+
+    display_sorted_results(sorted_students)
+
+def sort_by_age() -> str | None:
+    sorted_students = sorted(
+        student_records.values(),
+        key=lambda student: student["age"],
+        reverse=True
+    )
+
+    display_sorted_results(sorted_students)
+
+
+def acquire_sort_choice(message: str) -> int:
+    """Acquires the user's sort choice"""
+    
+    while True:
+        initial_choice = utils.validate_int_input(message) 
+
+        if not (1 <= initial_choice <= 3):
+            print("Given sort choice is not within 1 and 3.\n")
+            return False
+        else:
+            return initial_choice
+    
+
+def sort_students() -> None:
+    """Executes what sort the user wishes"""
+    if students["student_counter"] == 0:
+        print("No students have been added yet!")
+        return
+    
+    print("What sort would the user like to go with?")
+    sort_choice = acquire_sort_choice("Options:\n (1) Name (A-Z)\n (2) GPA (Highest First)\n (3) Age (Highest First)\n\nChoose: ")
+    
+    sort_choices = {
+        1: sort_by_name,
+        2: sort_by_gpa,
+        3: sort_by_age,
+    }
+
+    return sort_choices[sort_choice]()
+
+    
+## LIST ALL STUDENTS
 def list_all_students() -> str | None:
     """Lists all students in order of how they were added"""
     
-    if student_counter == 0:
+    if students["student_counter"]== 0:
         print("There are no added students yet!")
         return
 
     print("\n─────────────   Student List   ─────────────\n")
-    current_student = 1 
+    current_student = 0 
      
     for identification, information in students["records"].items():
+        current_student += 1
         print(f"Student No. {current_student}:")
-        
+
         first_name = information["first_name"]
         middle_name = information["middle_name"]
         last_name = information["last_name"]
@@ -76,7 +157,6 @@ def list_all_students() -> str | None:
 
         student = f"  Full Name: {first_name} {middle_name[0]}. {last_name}\n  Age: {age}\n  Course: {course}\n  GPA: {gpa}"
         print(student, end="\n\n")
-        current_student += 1
 
     print("──────────────────────────────────────────────")
     print(f"Total of Student/s: {current_student}\n")

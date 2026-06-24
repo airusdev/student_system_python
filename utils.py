@@ -83,7 +83,7 @@ def validate_course_input(message: str) -> str:
                     'BSN - Bachelor of Science in Nursing',
                     'BSA - Bachelor of Science in Accountancy',
                     'BSME - Bachelor of Science in Mechanical Engineering',
-                    'BSEE - Bachelor of Sciencee in Electrical Engineering',
+                    'BSEE - Bachelor of Science in Electrical Engineering',
                     }
     
     print("\nPlease input the abbreviation.\nFor example, put in 'BSCS' if you want to pursue Computer Science.\n")
@@ -171,24 +171,34 @@ def add_student() -> None:
     
     return "Added Student"
 
-
 def update_student():
+    """Calls up database to update a student's information""" 
+    
     db_access.update_student_in_database()
     return "Updated Student"
 
 def delete_student():
+    """Calls up the database to delete a student"""
+
     db_access.delete_student()
     return "Delete Student"
 
 def search_student():
+    """Calls up the database to search for a specific student"""
+
     db_access.search_student()
     return "Search Student"
 
 def list_all_students():
+    """Calls up the database to list all of the students"""
+
     db_access.list_all_students()
     return "List All Students"
 
 def sort_students():
+    """Calls the database and prints the sorted students by Name, by GPA, and by Age"""
+
+    db_access.sort_students()
     return "Sort Students"
 
 def exit_():

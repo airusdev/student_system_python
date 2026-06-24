@@ -1,7 +1,8 @@
 # Student System in Python
-## TODAY'S GOALS (June 7, 2026)
-    1. fix validation of validate_course_input()
-    2. finish search_student()
+## TODAY'S GOALS (June 25, 2026)
+    1. improve aesthetic when printing out students
+    2. create a dedicated function for printing out students
+    3. improve list_all_students and display_sorted_results to this function
 
 
 error in validate_course_input() -> put in "BS" and it gets accepted. it assumed the first matching 'BS' abbreviation
