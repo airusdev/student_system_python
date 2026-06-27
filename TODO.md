@@ -3,6 +3,7 @@
     1. improve aesthetic when printing out students
     2. create a dedicated function for printing out students
     3. improve list_all_students and display_sorted_results to this function
+    4. create a function that automatically adds "---Student List" etcetc
 
 
 error in validate_course_input() -> put in "BS" and it gets accepted. it assumed the first matching 'BS' abbreviation

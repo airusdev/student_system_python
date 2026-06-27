@@ -41,7 +41,6 @@ def validate_float_input(message: str) -> float:
         except (ValueError, TypeError):
             print("Given input is not a valid float.\n")
        
-
 def validate_menu_input(string_input: str) -> int:
     """Validates the user's choice in the main menu and returns it"""
     
@@ -112,20 +111,6 @@ def validate_age_input(message: str) -> int:
             return integer
         else:
             print("The inputted age must be within 15 and 60.\n") 
-    
-    
-    valid_age = False
-    
-    while not valid_age:
-        integer = validate_int_input(message)
-        
-        if 15 <= integer <= 60:
-            valid_age = True
-            return integer
-        else:
-            print("The inputted age must be within 15 and 60.\n")    
-
-
 
 
 # --- GROUP 2: STRING FORMATTING ---

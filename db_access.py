@@ -4,22 +4,58 @@ import utils
 from datetime import datetime
 import time
 import re
+import argparse
 
-db_file = "./database.json"
-current_year = 2026
+db_file = "./data/database.json"
+
+# SETUP ARGPARSE
+parser = argparse.ArgumentParser()
+parser.add_argument('--reset', action='store_true')
+args = parser.parse_args()
+
 
 # DATABASE OPERATIONS
-def load_db():
+def fresh_db() -> dict[str]:
+    """Creates a fresh database when JSON file is corrupted"""
+    global students
+    global student_records
+    
+    students = {
+        "current_year": datetime.now().year,
+        "student_counter": 0,
+        "records": {}
+    }
+    
+    student_records = students["records"]
+    save_db(students)
+
+def load_db() -> None:
     """Loads the database""" 
     with open(db_file, "r") as f:
-        return json.load(f)
+        try:
+            global students
+            global student_records
+            
+            students = json.load(f) 
+            student_records = students["records"]
+            save_db(students)
+            
+        except json.JSONDecodeError:
+            fresh_db()
 
-def save_db(data):
+def save_db(data) -> None:
     """Overwrites the database"""
     with open(db_file, "w") as f:
         json.dump(data, f, indent=4)
 
+def reset_db() -> None:
+    """Resets the student records"""
+    students["records"] = {}
+    students["student_counter"] = 0
+    save_db(students)
 
+
+    
 ## UPDATE STUDENT COUNTER
 def update_student_counter() -> None:
     if datetime.now().year > students["current_year"]:
@@ -27,11 +63,10 @@ def update_student_counter() -> None:
         students["student_counter"] = 0
         save_db(students)
 
-students = load_db()
-student_records = students["records"]
-update_student_counter()
-current_year = students["current_year"]
+load_db()
 
+if args.reset:
+    reset_db()
 
 # STUDENT SYSTEM OPERATIONS
 ## GENERAL VALIDATORS
@@ -40,12 +75,12 @@ def acquire_student_id(message: str) -> str:
     student_id_format = rf"^{datetime.now().year}S[1-9]\d*$"
     
     while True:
-        given_id = input(message)
-
         if students["student_counter"] == 0:
-            print("There are no students. Please add a student first.")
+            print("There are no students. Please add a student first.") 
             break
-        elif not re.fullmatch(student_id_format, given_id):
+        
+        given_id = input(message)
+        if not re.fullmatch(student_id_format, given_id):
             print("This student ID is not in a valid format.\n")
         elif students["records"].get(given_id) == None:
             print("This student ID does not exist in the database.\n")
@@ -114,7 +149,7 @@ def acquire_sort_choice(message: str) -> int:
 
         if not (1 <= initial_choice <= 3):
             print("Given sort choice is not within 1 and 3.\n")
-            return False
+            return None
         else:
             return initial_choice
     
@@ -171,19 +206,21 @@ def list_all_students() -> str | None:
 def search_student():
     """Prints a student's information using their student ID"""
     student_id = acquire_student_id("Input the student ID you wish to search: ")
-    database = students["records"][student_id]
 
-    first_name = database["first_name"]
-    middle_name = database["middle_name"]
-    last_name = database["last_name"]
-    age = database["age"]
-    course = database["course"]
-    gpa = database["gpa"]
+    if student_id:
+        database = student_records[student_id]
 
-    print("\n\n─────────────   Student List   ─────────────\n")
-    student = f"  Full Name: {first_name} {middle_name[0]}. {last_name}\n  Age: {age}\n  Course: {course}\n  GPA: {gpa}"
-    print(student)
-    print("\n──────────────────────────────────────────────\n")
+        first_name = database["first_name"]
+        middle_name = database["middle_name"]
+        last_name = database["last_name"]
+        age = database["age"]
+        course = database["course"]
+        gpa = database["gpa"]
+
+        print("\n\n─────────────   Student List   ─────────────\n")
+        student = f"  Full Name: {first_name} {middle_name[0]}. {last_name}\n  Age: {age}\n  Course: {course}\n  GPA: {gpa}"
+        print(student)
+        print("\n──────────────────────────────────────────────\n")
      
     
     
@@ -191,10 +228,12 @@ def search_student():
 def delete_student():
     """Delete a student in the database using student id"""
     student_id = acquire_student_id("Input the student ID you wish to delete: ")
-    students["records"].pop(student_id)
-    print(f"Deleted Student ID: {student_id}")
 
-    save_db(students)
+    if student_id:
+        students["records"].pop(student_id)
+        print(f"Deleted Student ID: {student_id}")
+
+        save_db(students)
 
 
 ## UPDATE STUDENT
@@ -287,10 +326,12 @@ def update_student_choice() -> dict:
 def update_student_in_database() -> None:
     """Using the student ID, the system updates the student's information"""
     student_id = acquire_student_id("Input the student ID you wish to update: ") 
-    updated_student_information = update_student_choice()
     
-    students[student_id].update(updated_student_information) 
-    save_db(students)
+    if student_id: 
+        updated_student_information = update_student_choice()
+    
+        student_records[student_id].update(updated_student_information) 
+        save_db(students)
 
 ## ADD STUDENT
 def create_student_id() -> int:
